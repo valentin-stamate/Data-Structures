@@ -2,7 +2,7 @@
 
 ### About
 
-Here are few data structures build from scratch : `LinkedList`
+Here are few data structures build from scratch : `LinkedList`, `DoublyLinkedList`
 
 ### Official Documentation
 
