@@ -134,6 +134,7 @@ public class LinkedList<T> {
 		}
 
 		this.last.next = newNode;
+		this.last = newNode;
 	}
 
 	public void clear() {
@@ -208,6 +209,8 @@ public class LinkedList<T> {
 	}
 
 	public int lastIndexOf(T t) {
+		if(t == null)
+			return -1;
 		int index = -1;
 		int i = 0;
 		Node<T> temp = this.first;

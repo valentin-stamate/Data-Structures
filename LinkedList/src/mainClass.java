@@ -5,7 +5,7 @@ public class mainClass {
 	public static void main(String[] args) {
 
 		LinkedList<Person> list = new LinkedList<Person>();
-
+		
 		list.add(new Person("Person 1", 18));
 		list.add(new Person("Person 2", 19));
 		list.add(new Person("Person 3", 20));
@@ -21,11 +21,11 @@ public class mainClass {
 	}
 
 	public static void print(Object o) {
-		System.out.print(o + " ");
+		System.out.print(o);
 	}
 
 	public static void println(Object o) {
-		System.out.print("\n" + o + " ");
+		System.out.print("\n" + o);
 	}
 
 }
