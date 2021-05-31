@@ -3,7 +3,7 @@ package data_structures.trie;
 public class Trie {
     private static Node root;
 
-    Trie(){
+    public Trie(){
         root = new Node();
     }
 
@@ -15,12 +15,12 @@ public class Trie {
 
         for(int i = 0; i < depth; i++) {
             index = key.charAt(i) - 'a';
-            if(temp.childrens[ index ] == null)
-                temp.childrens[ index ] = new Node();
-            temp = temp.childrens[ index ];
+            if(temp.getChildrens()[ index ] == null)
+                temp.getChildrens()[ index ] = new Node();
+            temp = temp.getChildrens()[ index ];
         }
 
-        temp.endOfWord = true;
+        temp.setEndOfWord(true);
     }
 
     public boolean search(String key) {
@@ -31,17 +31,17 @@ public class Trie {
 
         for(int i = 0; i < depth; i++) {
             index = key.charAt(i) - 'a';
-            if(temp.childrens[index] == null)
+            if(temp.getChildrens()[index] == null)
                 return false;
-            temp = temp.childrens[index];
+            temp = temp.getChildrens()[index];
         }
 
-        return (temp != null && temp.endOfWord);
+        return (temp != null && temp.isEndOfWord());
     }
 
     public boolean isEmpty() {
         for(int i = 0; i < Node.ALPHABET_SIZE; i++)
-            if(root.childrens[i] != null)
+            if(root.getChildrens()[i] != null)
                 return false;
         return true;
 
@@ -53,11 +53,11 @@ public class Trie {
 
         if(depth == key.length()) {
 
-            if(root.endOfWord) {
+            if(root.isEndOfWord()) {
 
                 for(int i = 0; i < Node.ALPHABET_SIZE; i++) {
-                    if(root.childrens[i] != null) {
-                        root.endOfWord = false;
+                    if(root.getChildrens()[i] != null) {
+                        root.setEndOfWord(false);
                         return root;
                     }
                 }
@@ -69,7 +69,7 @@ public class Trie {
         }
 
         int index = key.charAt(depth) - 'a';
-        root.childrens[index] = remove(root.childrens[index], key, depth + 1);
+        root.getChildrens()[index] = remove(root.getChildrens()[index], key, depth + 1);
 
 
         return root;
@@ -87,18 +87,18 @@ public class Trie {
 
         for(int i = 0; i < depth; i++) {
             index = key.charAt(i) - 'a';
-            if( temp.childrens[index] == null ) {
+            if( temp.getChildrens()[index] == null ) {
                 System.out.print("Key not found");
                 return;
             }
-            temp = temp.childrens[index];
+            temp = temp.getChildrens()[index];
         }
 
         if(temp == null) {
             System.out.print("Key not found");
             return;
         }
-        if(temp.endOfWord)
+        if(temp.isEndOfWord())
             System.out.print(key + "\n");
         this.displayContent(temp, key);
 
@@ -124,10 +124,10 @@ public class Trie {
         String sBackup = s;
         for(int i = 0; i < Node.ALPHABET_SIZE; i++) {
             s = sBackup;
-            Node child = root.childrens[i];
+            Node child = root.getChildrens()[i];
             if(child != null) {
                 s += Character.toString( (char) ('a' + i) );
-                if(child.endOfWord)
+                if(child.isEndOfWord())
                     System.out.print(s + "\n");
                 this.displayContent(child, s);
             }

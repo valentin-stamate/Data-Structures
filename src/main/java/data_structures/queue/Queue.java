@@ -1,49 +1,72 @@
 package data_structures.queue;
 
-public class Queue {
-    Object[] queue;
-    int first = 0, top = -1;
-    int MAX_SIZE = 0;
+public class Queue<T> {
+    private T[] list;
+    private int first = 0;
+    private int top = -1;
+    private int maxCapacity = 0;
 
-    Queue(int size){
-        this.queue = new Object[size];
-        this.MAX_SIZE = size;
+    public Queue(int size){
+        this.list = (T[]) new Object[size];
+        this.maxCapacity = size;
     }
 
-    public boolean add(Object o) {
-        if( this.isFull() ) {
-            return false;
+    public Queue() {
+        this.list = (T[]) new Object[10];
+        this.maxCapacity = 10;
+    }
+
+    public boolean add(T t) {
+        if(this.isFull()) {
+            increaseBuffer();
         }
 
-        this.queue[++this.top] = o;
+        list[++top] = t;
 
         return true;
     }
 
-    public Object element() {
-        return !this.isEmpty() ? this.queue[this.first] : null;
+    private void increaseBuffer() {
+        T[] oldBuffer = list;
+        int oldCapacity = maxCapacity;
+
+        int newCapacity = maxCapacity + maxCapacity / 2;
+        T[] newBuffer = (T[]) new Object[newCapacity];
+
+        for (int i = 0; i < oldCapacity; i++) {
+            newBuffer[i] = oldBuffer[i];
+        }
+
+        list = newBuffer;
+        maxCapacity = newCapacity;
     }
 
-    public Object poll() {
+    public T element() {
+        return !isEmpty() ? list[first] : null;
+    }
+
+    public T poll() {
         if( this.isEmpty() )
             return null;
 
-        Object temp = this.queue[this.first];
+        T temp = list[first];
 
-        for(int i = 0; i < this.top; i++)
-            this.queue[i] = this.queue[i + 1];
-        this.top--;
+        System.arraycopy(list, 1, list, 0, top);
+
+        top--;
         return temp;
-
     }
 
     public boolean isEmpty() {
-        return (this.top == -1);
+        return (top == -1);
     }
 
     public boolean isFull() {
-        return (this.top + 1 == this.MAX_SIZE);
+        return (top + 1 == maxCapacity);
     }
 
+    public int size() {
+        return top + 1;
+    }
 }
 

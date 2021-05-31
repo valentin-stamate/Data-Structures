@@ -1,50 +1,70 @@
 package data_structures.stack;
 
-public class Stack {
-    Object[] stack;
-    int top = -1;
-    int MAX_LENGTH = 0;
+public class Stack<T> {
+    private T[] list;
+    private int top = -1;
+    private int maxLength = 0;
 
     Stack(int size){
-        this.stack = new Object[size];
-        this.MAX_LENGTH = size;
+        this.list = (T[]) new Object[size];
+        this.maxLength = size;
     }
 
-    public boolean push(Object o) {
-        if( this.isFull() ) {
-            return false;
+    public Stack() {
+        this.list = (T[]) new Object[10];
+        this.maxLength = 10;
+    }
+
+    public boolean push(T t) {
+        if( isFull() ) {
+            increaseBuffer();
         }
 
-        this.stack[++this.top] = o;
+        list[++top] = t;
 
         return true;
     }
 
-    public Object pop() {
-        if( this.isEmpty() ) {
-            return null;
+    private void increaseBuffer() {
+        T[] oldBuffer = list;
+        int oldCapacity = maxLength;
+
+        int newCapacity = maxLength + maxLength / 2;
+        T[] newBuffer = (T[]) new Object[newCapacity];
+
+        for (int i = 0; i < oldCapacity; i++) {
+            newBuffer[i] = oldBuffer[i];
         }
 
-        return this.stack[this.top--];
+        list = newBuffer;
+        maxLength = newCapacity;
     }
 
-    public Object peek() {
-        if( this.isEmpty() ) {
+    public T pop() {
+        if( isEmpty() ) {
             return null;
         }
-        return this.stack[top];
+
+        return list[top--];
+    }
+
+    public T peek() {
+        if( isEmpty() ) {
+            return null;
+        }
+        return list[top];
     }
 
     public int size() {
-        return this.top + 1;
+        return top + 1;
     }
 
     public boolean isEmpty() {
-        return (this.top == -1);
+        return (top == -1);
     }
 
     public boolean isFull() {
-        return (this.top + 1 == this.MAX_LENGTH);
+        return (top + 1 == maxLength);
     }
 
 }

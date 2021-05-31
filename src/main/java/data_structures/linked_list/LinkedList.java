@@ -18,7 +18,7 @@ public class LinkedList<T> {
             this.first = newNode;
             this.last = newNode;
         } else {
-            this.last.next = newNode;
+            this.last.setNext(newNode);
             this.last = newNode;
         }
         return true;
@@ -35,7 +35,7 @@ public class LinkedList<T> {
 
         if (index == 0) {
             this.first = newNode;
-            this.first.next = temp;
+            this.first.setNext(temp);
 
             this.length++;
             return true;
@@ -43,12 +43,12 @@ public class LinkedList<T> {
 
         if (index < this.length) {
             while (i < index - 1) {
-                temp = temp.next;
+                temp = temp.getNext();
                 i++;
             }
-            Node<T> nextNode = temp.next;
-            temp.next = newNode;
-            newNode.next = nextNode;
+            Node<T> nextNode = temp.getNext();
+            temp.setNext(newNode);
+            newNode.setNext(nextNode);
 
             this.length++;
             return true;
@@ -81,7 +81,7 @@ public class LinkedList<T> {
         if (index == 0) {
             Node<T> copyList = this.first;
 
-            auxList.last.next = copyList;
+            auxList.last.setNext(copyList);
             this.first = auxList.first;
 
             this.length += plusLength;
@@ -93,13 +93,13 @@ public class LinkedList<T> {
 
         if (index < this.length) {
             while (i < index - 1) {
-                temp = temp.next;
+                temp = temp.getNext();
                 i++;
             }
 
-            Node<T> nextNode = temp.next;
-            auxList.last.next = nextNode;
-            temp.next = auxList.first;
+            Node<T> nextNode = temp.getNext();
+            auxList.last.setNext(nextNode);
+            temp.setNext(auxList.first);
 
             this.length += plusLength;
             return true;
@@ -114,7 +114,7 @@ public class LinkedList<T> {
             return;
 
         Node<T> newNode = new Node<T>(t);
-        newNode.next = this.first;
+        newNode.setNext(this.first);
         this.first = newNode;
         this.length++;
 
@@ -134,7 +134,7 @@ public class LinkedList<T> {
             return;
         }
 
-        this.last.next = newNode;
+        this.last.setNext(newNode);
         this.last = newNode;
     }
 
@@ -150,8 +150,8 @@ public class LinkedList<T> {
         Node<T> temp = this.first;
 
         while (temp != null) {
-            list.add(temp.data);
-            temp = temp.next;
+            list.add(temp.getData());
+            temp = temp.getNext();
         }
 
         return list;
@@ -163,15 +163,15 @@ public class LinkedList<T> {
 
         Node<T> temp = this.first;
         while (temp != null) {
-            if (temp.data == t)
+            if (temp.getData() == t)
                 return true;
-            temp = temp.next;
+            temp = temp.getNext();
         }
         return false;
     }
 
     public T element() {
-        return this.first.data;
+        return this.first.getData();
     }
 
     public T get(int index) {
@@ -181,18 +181,18 @@ public class LinkedList<T> {
         Node<T> temp = this.first;
         int i = 0;
         while (i < index) {
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
-        return temp.data;
+        return temp.getData();
     }
 
     public T getFirst() {
-        return this.first.data;
+        return this.first.getData();
     }
 
     public T getLast() {
-        return this.last.data;
+        return this.last.getData();
     }
 
     public int indexOf(T t) {
@@ -201,9 +201,9 @@ public class LinkedList<T> {
         int i = 0;
         Node<T> temp = this.first;
         while (temp != null) {
-            if (temp.data == t)
+            if (temp.getData() == t)
                 return i;
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
         return -1;
@@ -217,10 +217,10 @@ public class LinkedList<T> {
         Node<T> temp = this.first;
 
         while (temp != null) {
-            if (temp.data == t) {
+            if (temp.getData() == t) {
                 index = i;
             }
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
 
@@ -229,30 +229,30 @@ public class LinkedList<T> {
 
     public T pollFirst() {
         Node<T> temp = this.first;
-        this.first = this.first.next;
+        this.first = this.first.getNext();
         this.length--;
-        return temp.data;
+        return temp.getData();
     }
 
     public T pollLast() {
         Node<T> copy = this.last;
         Node<T> temp = this.first;
 
-        while (temp.next != this.last) {
-            temp = temp.next;
+        while (temp.getNext() != this.last) {
+            temp = temp.getNext();
         }
-        temp.next = null;
+        temp.setNext(null);
         this.last = temp;
         this.length--;
 
-        return copy.data;
+        return copy.getData();
     }
 
     public T remove() {
         Node<T> copy = this.first;
-        this.first = this.first.next;
+        this.first = this.first.getNext();
         this.length--;
-        return copy.data;
+        return copy.getData();
     }
 
     public T remove(int index) {
@@ -264,20 +264,20 @@ public class LinkedList<T> {
 
         if (index == 0) {
             Node<T> copy = this.first;
-            this.first = this.first.next;
+            this.first = this.first.getNext();
             this.length--;
-            return copy.data;
+            return copy.getData();
         }
 
         while (i < index - 1) {
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
 
-        Node<T> nodeToRemove = temp.next;
-        temp.next = nodeToRemove.next;
+        Node<T> nodeToRemove = temp.getNext();
+        temp.setNext(nodeToRemove.getNext());
         this.length--;
-        return nodeToRemove.data;
+        return nodeToRemove.getData();
     }
 
     public boolean remove(T t) {
@@ -285,20 +285,20 @@ public class LinkedList<T> {
             return false;
         Node<T> temp = this.first;
 
-        if (t == temp.data) {
-            this.first = this.first.next;
+        if (t == temp.getData()) {
+            this.first = this.first.getNext();
             this.length--;
             return true;
         }
 
         while (temp != null) {
-            Node<T> nextTemp = temp.next;
-            if (nextTemp.data == t) {
-                temp.next = nextTemp.next;
+            Node<T> nextTemp = temp.getNext();
+            if (nextTemp.getData() == t) {
+                temp.setNext(nextTemp.getNext());
                 this.length--;
                 return true;
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
         return false;
     }
@@ -306,8 +306,8 @@ public class LinkedList<T> {
     public void printList() {
         Node<T> temp = this.first;
         while (temp != null) {
-            System.out.print(temp.data + " ");
-            temp = temp.next;
+            System.out.print(temp.getData() + " ");
+            temp = temp.getNext();
         }
     }
 

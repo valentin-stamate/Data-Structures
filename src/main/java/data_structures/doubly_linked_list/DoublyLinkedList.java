@@ -11,16 +11,15 @@ public class DoublyLinkedList<T> {
         if (t == null)
             return false;
         Node<T> newNode = new Node<T>(t);
-        this.length++;
+        length++;
 
-        if (this.first == null) {
-            this.first = newNode;
-            this.last = newNode;
+        if (first == null) {
+            first = newNode;
         } else {
-            newNode.previous = this.last;
-            this.last.next = newNode;
-            this.last = newNode;
+            newNode.setPrevious(last);
+            last.setNext(newNode);
         }
+        last = newNode;
         return true;
     }
 
@@ -31,31 +30,31 @@ public class DoublyLinkedList<T> {
         Node<T> newNode = new Node<T>(t);
         int i = 0;
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
 
         if (index == 0) {
-            this.first = newNode;
-            this.first.next = temp;
-            temp.previous = this.first;
+            first = newNode;
+            first.setNext(temp);
+            temp.setPrevious(first);
 
-            this.length++;
+            length++;
             return true;
         }
 
-        if (index < this.length) {
+        if (index < length) {
             while (i < index - 1) {
-                temp = temp.next;
+                temp = temp.getNext();
                 i++;
             }
-            Node<T> nextNode = temp.next;
+            Node<T> nextNode = temp.getNext();
 
-            temp.next = newNode;
-            newNode.previous = temp;
+            temp.setNext(newNode);
+            newNode.setPrevious(temp);
 
-            newNode.next = nextNode;
-            nextNode.previous = newNode;
+            newNode.setNext(nextNode);
+            nextNode.setPrevious(newNode);
 
-            this.length++;
+            length++;
             return true;
         }
         throw new IndexOutOfBoundsException("There is no element for index : " + index);
@@ -67,7 +66,7 @@ public class DoublyLinkedList<T> {
             return false;
 
         for (T t : collectionList) {
-            this.add(t);
+            add(t);
         }
         return true;
     }
@@ -84,35 +83,35 @@ public class DoublyLinkedList<T> {
         }
 
         if (index == 0) {
-            Node<T> copyList = this.first;
+            Node<T> copyList = first;
 
-            auxList.last.next = copyList;
-            copyList.previous = auxList.last;
+            auxList.last.setNext(copyList);
+            copyList.setPrevious(auxList.last);
 
-            this.first = auxList.first;
+            first = auxList.first;
 
-            this.length += plusLength;
+            length += plusLength;
             return true;
         }
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         int i = 0;
 
-        if (index < this.length) {
+        if (index < length) {
             while (i < index - 1) {
-                temp = temp.next;
+                temp = temp.getNext();
                 i++;
             }
 
-            Node<T> nextNode = temp.next;
+            Node<T> nextNode = temp.getNext();
 
-            auxList.last.next = nextNode;
-            nextNode.previous = auxList.last;
+            auxList.last.setNext(nextNode);
+            nextNode.setPrevious(auxList.last);
 
-            temp.next = auxList.first;
-            auxList.first.previous = temp;
+            temp.setNext(auxList.first);
+            auxList.first.setPrevious(temp);
 
-            this.length += plusLength;
+            length += plusLength;
             return true;
         }
         throw new IndexOutOfBoundsException("There is no element for index : " + index);
@@ -125,11 +124,11 @@ public class DoublyLinkedList<T> {
             return;
 
         Node<T> newNode = new Node<T>(t);
-        Node<T> copy = this.first;
-        this.first = newNode;
-        newNode.next = copy;
-        copy.previous = newNode;
-        this.length++;
+        Node<T> copy = first;
+        first = newNode;
+        newNode.setNext(copy);
+        copy.setPrevious(newNode);
+        length++;
 
         return;
     }
@@ -140,32 +139,32 @@ public class DoublyLinkedList<T> {
 
         Node<T> newNode = new Node<T>(t);
 
-        if (this.last == null) {
-            this.first = newNode;
-            this.last = newNode;
-            this.length++;
+        if (last == null) {
+            first = newNode;
+            last = newNode;
+            length++;
             return;
         }
 
-        this.last.next = newNode;
-        newNode.previous = this.last;
-        this.last = newNode;
+        last.setNext(newNode);
+        newNode.setPrevious(last);
+        last = newNode;
     }
 
     public void clear() {
-        this.last = null;
-        this.first = null;
-        this.length = 0;
+        last = null;
+        first = null;
+        length = 0;
     }
 
     public ArrayList<T> clone() {
         ArrayList<T> list = new ArrayList<T>();
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
 
         while (temp != null) {
-            list.add(temp.data);
-            temp = temp.next;
+            list.add(temp.getData());
+            temp = temp.getNext();
         }
 
         return list;
@@ -174,11 +173,11 @@ public class DoublyLinkedList<T> {
     public ArrayList<T> cloneReverse() {
         ArrayList<T> list = new ArrayList<T>();
 
-        Node<T> temp = this.last;
+        Node<T> temp = last;
 
         while (temp != null) {
-            list.add(temp.data);
-            temp = temp.previous;
+            list.add(temp.getData());
+            temp = temp.getPrevious();
         }
 
         return list;
@@ -188,49 +187,49 @@ public class DoublyLinkedList<T> {
         if (t == null)
             return false;
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         while (temp != null) {
-            if (temp.data == t)
+            if (temp.getData() == t)
                 return true;
-            temp = temp.next;
+            temp = temp.getNext();
         }
         return false;
     }
 
     public T element() {
-        return this.first.data;
+        return first.getData();
     }
 
     public T get(int index) {
-        if (index < 0 || index >= this.length)
+        if (index < 0 || index >= length)
             throw new IndexOutOfBoundsException("There is no element for index : " + index);
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         int i = 0;
         while (i < index) {
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
-        return temp.data;
+        return temp.getData();
     }
 
     public T getFirst() {
-        return this.first.data;
+        return first.getData();
     }
 
     public T getLast() {
-        return this.last.data;
+        return last.getData();
     }
 
     public int indexOf(T t) {
         if (t == null)
             return -1;
         int i = 0;
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         while (temp != null) {
-            if (temp.data == t)
+            if (temp.getData() == t)
                 return i;
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
         return -1;
@@ -240,15 +239,15 @@ public class DoublyLinkedList<T> {
         if(t == null)
             return -1;
 
-        int index = this.length - 1;
+        int index = length - 1;
 
-        Node<T> temp = this.last;
+        Node<T> temp = last;
 
         while (temp != null) {
-            if (temp.data == t) {
+            if (temp.getData() == t) {
                 return index;
             }
-            temp = temp.previous;
+            temp = temp.getPrevious();
             index--;
         }
 
@@ -256,88 +255,88 @@ public class DoublyLinkedList<T> {
     }
 
     public T pollFirst() {
-        Node<T> temp = this.first;
-        this.first = this.first.next;
-        this.first.previous = null;
-        this.length--;
-        return temp.data;
+        Node<T> temp = first;
+        first = first.getNext();
+        first.setPrevious(null);
+        length--;
+        return temp.getData();
     }
 
     public T pollLast() {
-        Node<T> copy = this.last;
-        Node<T> prev = this.last.previous;
-        prev.next = null;
-        this.last = prev;
+        Node<T> copy = last;
+        Node<T> prev = last.getPrevious();
+        prev.setNext(null);
+        last = prev;
 
-        this.length--;
+        length--;
 
-        return copy.data;
+        return copy.getData();
     }
 
     public T remove() {
-        Node<T> copy = this.first;
-        this.first = this.first.next;
-        this.first.previous = null;
-        this.length--;
-        return copy.data;
+        Node<T> copy = first;
+        first = first.getNext();
+        first.setPrevious(null);
+        length--;
+        return copy.getData();
     }
 
     public T remove(int index) {
-        if (index < 0 || index >= this.length)
+        if (index < 0 || index >= length)
             throw new IndexOutOfBoundsException("There is no element for index : " + index);
 
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         int i = 0;
 
         if (index == 0) {
-            Node<T> copy = this.first;
-            this.first = this.first.next;
-            this.first .previous = null;
-            this.length--;
-            return copy.data;
+            Node<T> copy = first;
+            first = first.getNext();
+            first.setPrevious(null);
+            length--;
+            return copy.getData();
         }
 
         while (i < index - 1) {
-            temp = temp.next;
+            temp = temp.getNext();
             i++;
         }
 
-        Node<T> nodeToRemove = temp.next;
-        temp.next = nodeToRemove.next;
-        nodeToRemove.next.previous = temp;
-        this.length--;
-        return nodeToRemove.data;
+        Node<T> nodeToRemove = temp.getNext();
+        temp.setNext(nodeToRemove.getNext());
+        nodeToRemove.getNext().setPrevious(temp);
+        length--;
+        return nodeToRemove.getData();
     }
 
     public boolean remove(T t) {
         if (t == null)
             return false;
-        Node<T> temp = this.first;
+        Node<T> temp = first;
 
-        if (t == temp.data) {
-            this.first = this.first.next;
-            this.first.previous = null;
-            this.length--;
+        if (t == temp.getData()) {
+            first = first.getNext();
+            first.setPrevious(null);
+            length--;
             return true;
         }
 
         while (temp != null) {
-            if (temp == t) {
-                temp.previous.next = temp.next;
-                temp.next.previous = temp.previous;
-                this.length--;
+            if (temp.getData() == t) {
+                temp.getPrevious().setNext(temp.getNext());
+                temp.getNext().setPrevious(temp.getPrevious());
+                length--;
                 return true;
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
         return false;
     }
 
     public void printList() {
-        Node<T> temp = this.first;
+        Node<T> temp = first;
         while (temp != null) {
-            System.out.print(temp.data + " ");
-            temp = temp.next;
+            System.out.print(temp.getData() + " ");
+            temp = temp.getNext();
         }
     }
 

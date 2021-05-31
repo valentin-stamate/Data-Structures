@@ -7,7 +7,7 @@ public class HashTable<E, T> {
     private int bucketsNumber;
     public int size;
 
-    HashTable(){
+    public HashTable(){
         bucketArray = new ArrayList<>();
         bucketsNumber = 10;
         size = 0;
@@ -25,11 +25,11 @@ public class HashTable<E, T> {
         // check for an already existing key
         // and replace it with the new one
         while(temp != null) {
-            if( temp.key.equals(key) ) {
-                temp.value = value;
+            if( temp.getKey().equals(key) ) {
+                temp.setValue(value);
                 return;
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
 
         Node<E, T> newNode = new Node<E, T>(key, value);
@@ -42,7 +42,7 @@ public class HashTable<E, T> {
         }
 
         // if the temp is not null we can put the new node in the bucket
-        newNode.next = temp;
+        newNode.setNext(temp);
         bucketArray.set(bucketIndex, newNode);
 
         // now if the size / bucketsNumber is greater than 0.7 double the hashtable size
@@ -59,8 +59,8 @@ public class HashTable<E, T> {
             for(Node<E, T> node : bucketArrayCopy) {
                 // add all nodes into buckets
                 while(node != null) {
-                    add(node.key, node.value);
-                    node = node.next;
+                    add(node.getKey(), node.getValue());
+                    node = node.getNext();
                 }
             }
 
@@ -74,10 +74,10 @@ public class HashTable<E, T> {
         Node<E, T> bucket = bucketArray.get(bucketIndex);
 
         while(bucket != null) {
-            if(bucket.key.equals( key )) {
-                return bucket.value;
+            if(bucket.getKey().equals( key )) {
+                return bucket.getValue();
             }
-            bucket = bucket.next;
+            bucket.setNext(bucket.getNext());
         }
         return null;
     }
@@ -92,27 +92,31 @@ public class HashTable<E, T> {
 
         Node<E, T> prev = nodeToRemove;
 
-        if( nodeToRemove.key.equals(key) ) {
-            bucketArray.set(bucketIndex, nodeToRemove.next);
-            return nodeToRemove.value;
+        if( nodeToRemove.getKey().equals(key) ) {
+            bucketArray.set(bucketIndex, nodeToRemove.getNext());
+            return nodeToRemove.getValue();
         }
 
-        while(nodeToRemove != null && nodeToRemove.next != null) {
+        while(nodeToRemove != null && nodeToRemove.getNext() != null) {
 
-            if( nodeToRemove.key.equals(key) ) {
-                prev.next = nodeToRemove.next;
+            if( nodeToRemove.getKey().equals(key) ) {
+                prev.setNext(nodeToRemove.getNext());
                 size--;
-                return nodeToRemove.value;
+                return nodeToRemove.getValue();
             }
             prev = nodeToRemove;
-            nodeToRemove = nodeToRemove.next;
+            nodeToRemove.setNext(nodeToRemove.getNext());
         }
 
-        if(nodeToRemove.key.equals(key) ) {
-            prev.next = null;
+        if (nodeToRemove == null) {
+            return null;
+        }
+
+        if(nodeToRemove.getKey().equals(key) ) {
+            prev.setNext(null);
             size--;
 
-            return nodeToRemove.value;
+            return nodeToRemove.getValue();
         }
 
         return null;
@@ -122,7 +126,6 @@ public class HashTable<E, T> {
         int hashCode = key.hashCode();
         return Math.abs( hashCode % bucketsNumber );
     }
-
 
 }
 
